@@ -1,27 +1,32 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using SaveMom.API.Configuration;
 using SaveMom.API.Extentions;
-using SaveMom.Contracts.Configurations;
+using SaveMom.Domain.Data;
 using SaveMom.Services;
+using SaveMom.Services.Identity;
 
 var AppCorsPolicy = "_appCorsPolicy";
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+var services = builder.Services;
 
 // Add services to the container.
-builder.Services.AddScoped<IOrganisationService, OrganisationService>();
+services.AddScoped(typeof(IDbContext<>), typeof(MongoDbContext<>));
+services.AddScoped<IOrganisationService, OrganisationService>();
+services.AddScoped<IAccountService, AccountService>();
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<ITokenService, TokenService>();
 
 //Options
-builder.Services.Configure<SaveMomStoreDatabaseOptions>
-    (configuration.GetSection(SaveMomStoreDatabaseOptions.SectionName));
-builder.Services.Configure<JwtOptions>
-    (configuration.GetSection(JwtOptions.SectionName));
+services.AddAppOptions(configuration);
 
-builder.Services.AddAppCors(AppCorsPolicy);
-builder.Services.AddControllers(o =>
+services.AddAppCors(AppCorsPolicy);
+
+services.AddAppIdentity(configuration);
+
+services.AddControllers(o =>
 {
     var policy = new AuthorizationPolicyBuilder()
     .RequireAuthenticatedUser()
@@ -30,16 +35,15 @@ builder.Services.AddControllers(o =>
     o.Filters.Add(new AuthorizeFilter(policy));
 });
 
-builder.Services.AddAppAuthentication(configuration);
-builder.Services.AddAppAuthorization();
+services.AddAppAuthentication(configuration);
+services.AddAppAuthorization();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//builder.Services.AddMvc();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
