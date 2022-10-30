@@ -31,6 +31,7 @@ namespace SaveMom.IdentityApp.Extensions
         {
             services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
         }
+
         private static void AddAppIdentity(IServiceCollection services)
         {
             services.AddIdentity<AppUser, AppRole>(options =>

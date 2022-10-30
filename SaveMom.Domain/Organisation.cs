@@ -1,8 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDbGenericRepository.Attributes;
 
 namespace SaveMom.Domain
 {
+    [CollectionName("Organisations")]
     public class Organisation
     {
         [BsonId]
