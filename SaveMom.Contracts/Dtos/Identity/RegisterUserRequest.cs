@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace SaveMom.Contracts.Dtos.Identity
@@ -25,5 +26,7 @@ namespace SaveMom.Contracts.Dtos.Identity
         public string? UserName { get; set; }
 
         public Guid RoleId { get; set; }
+
+        public IFormFile? File { get; set; }
     }
 }

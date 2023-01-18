@@ -80,6 +80,9 @@ namespace SaveMom.API.Extentions
 
             services.Configure<JwtOptions>
                 (configuration.GetSection(JwtOptions.SectionName));
+
+            services.Configure<AzureBlobStorageOptions>
+                (configuration.GetSection(AzureBlobStorageOptions.SectionName));
             return services;
         }
     }

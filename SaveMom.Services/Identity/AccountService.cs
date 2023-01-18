@@ -1,8 +1,11 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SaveMom.Contracts.Configurations;
 using SaveMom.Contracts.Dtos.Identity;
 using SaveMom.Domain.Identity;
+using System.Text;
 
 namespace SaveMom.Services.Identity
 {
@@ -12,20 +15,27 @@ namespace SaveMom.Services.Identity
         private readonly RoleManager<AppRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IAzureBlobService _azureBlobService;
         private readonly ILogger<AccountService> _logger;
+
+        private readonly AzureBlobStorageOptions _storeOptions;
 
         public AccountService(
             UserManager<AppUser> userManager,
             RoleManager<AppRole> roleManager,
             SignInManager<AppUser> signInManager,
             ITokenService jwtTokenService,
-            ILogger<AccountService> logger)
+            ILogger<AccountService> logger,
+            IAzureBlobService azureBlobService,
+            IOptions<AzureBlobStorageOptions> storeOptions)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _tokenService = jwtTokenService;
+            _azureBlobService = azureBlobService;
             _logger = logger;
+            _storeOptions = storeOptions.Value;
         }
 
         public async Task<LoginResponse> Login(LoginRequest inputDto)
@@ -76,9 +86,14 @@ namespace SaveMom.Services.Identity
             var newUser = inputDto.Adapt<AppUser>();
             var createUser = await _userManager.CreateAsync(newUser, inputDto.Password);
 
+            var userId = newUser.Id.ToString();
             if (createUser.Succeeded)
             {
                 _logger.LogInformation(1, "User Created");
+
+                //Upload User Information
+                newUser.IdentityDocumentUrl = await UploadUserDocument(inputDto, userId);
+                await _userManager.UpdateAsync(newUser);
 
                 var getRole = _roleManager.Roles.FirstOrDefault(xx => xx.Id == inputDto.RoleId);
 
@@ -92,6 +107,7 @@ namespace SaveMom.Services.Identity
                     {
                         Email = inputDto.Email
                     };
+
                 }
 
                 return new RegisterUserResponse
@@ -113,5 +129,22 @@ namespace SaveMom.Services.Identity
             await _signInManager.SignOutAsync();
         }
 
+
+        private async Task<string> UploadUserDocument(RegisterUserRequest inputDto, string userId)
+        {
+            var file = inputDto.File;
+            var fileName = GenerateFileName(file.FileName, userId);
+            using (Stream stream = file.OpenReadStream())
+            {
+                string fileUri = await _azureBlobService.UploadFileToStorage(stream, fileName, _storeOptions.VerificationContainerName);
+                return fileUri;
+            }
+        }
+
+        private string GenerateFileName(string fileName, string userId)
+        {
+            string createFileName = $"{userId}-{fileName.Split('.')[0]}.{fileName.Split('.')[1]}";
+            return createFileName;
+        }
     }
 }

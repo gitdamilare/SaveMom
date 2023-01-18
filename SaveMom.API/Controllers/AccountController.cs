@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SaveMom.Contracts;
 using SaveMom.Contracts.Dtos.Identity;
 using SaveMom.Services.Identity;
@@ -17,7 +18,7 @@ namespace SaveMom.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<ApiResponse<RegisterUserResponse>>> Register([FromBody] RegisterUserRequest inputDto)
+        public async Task<ActionResult<ApiResponse<RegisterUserResponse>>> Register([FromForm]RegisterUserRequest inputDto)
         {
             if (ModelState.IsValid)
             {
@@ -45,6 +46,7 @@ namespace SaveMom.API.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<ApiResponse<LoginResponse>>> Login([FromBody] LoginRequest inputDto)
         {
