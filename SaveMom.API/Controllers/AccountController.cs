@@ -17,6 +17,7 @@ namespace SaveMom.API.Controllers
             _accountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<ApiResponse<RegisterUserResponse>>> Register([FromForm]RegisterUserRequest inputDto)
         {
