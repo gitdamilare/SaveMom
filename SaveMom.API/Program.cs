@@ -18,6 +18,7 @@ services.AddScoped<IOrganisationService, OrganisationService>();
 services.AddScoped<IAccountService, AccountService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<ITokenService, TokenService>();
+services.AddScoped<IAzureBlobService, AzureBlobServices>();
 
 //Options
 services.AddAppOptions(configuration);

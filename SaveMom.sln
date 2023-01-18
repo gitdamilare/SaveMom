@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaveMom.Services", "SaveMom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaveMom.Contracts", "SaveMom.Contracts\SaveMom.Contracts.csproj", "{B0E4B6B3-8E2E-43FD-8DD5-FC5BC9132F52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaveMom.IdentityApp", "SaveMom.IdentityApp\SaveMom.IdentityApp.csproj", "{B72242E6-3572-42C3-AD50-6C7042E608CE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{B0E4B6B3-8E2E-43FD-8DD5-FC5BC9132F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0E4B6B3-8E2E-43FD-8DD5-FC5BC9132F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0E4B6B3-8E2E-43FD-8DD5-FC5BC9132F52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B72242E6-3572-42C3-AD50-6C7042E608CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B72242E6-3572-42C3-AD50-6C7042E608CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B72242E6-3572-42C3-AD50-6C7042E608CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B72242E6-3572-42C3-AD50-6C7042E608CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
