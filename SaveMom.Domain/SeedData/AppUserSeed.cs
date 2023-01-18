@@ -1,18 +1,23 @@
-﻿using Bogus;
+﻿
+using Bogus;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MongoDB.Driver;
+using SaveMom.Domain.Identity;
 
-namespace SaveMom.IdentityApp.Models.Configuration
+namespace SaveMom.Domain.SeedData
 {
-    public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
+    internal class AppUserSeed
     {
-        public void Configure(EntityTypeBuilder<AppUser> builder)
+        public static void SeedData(IMongoCollection<AppUser> appUserCollection)
         {
-            builder.HasData(SeedUserData());
+            if (!appUserCollection.Find(_ => true).Any())
+            {
+                appUserCollection.InsertMany(GetInitialData());
+            }
         }
 
-        private static List<AppUser> SeedUserData()
+
+        private static IEnumerable<AppUser> GetInitialData()
         {
             var fakeUsers = new Faker<AppUser>()
                 .RuleFor(o => o.Email, o => o.Person.Email)
@@ -24,10 +29,10 @@ namespace SaveMom.IdentityApp.Models.Configuration
                 .RuleFor(o => o.EmailConfirmed, o => o.PickRandom(new bool[] { true, false }));
 
             var generatedFakeUsers = fakeUsers.Generate(5);
-            
+
             var password = "Savemom2022@";
             PasswordHasher<AppUser> ph = new PasswordHasher<AppUser>();
-            
+
             foreach (var user in generatedFakeUsers)
             {
                 user.PasswordHash = ph.HashPassword(user, password);

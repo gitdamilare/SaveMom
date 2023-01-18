@@ -1,7 +1,7 @@
 ﻿
 namespace SaveMom.Contracts.Configurations
 {
-    public class SaveMomStoreDatabaseOptions
+    public class DbStoreOptions
     {
         public const string SectionName = "SaveMomStoreDatabase";
 
@@ -10,5 +10,9 @@ namespace SaveMom.Contracts.Configurations
         public string DatabaseName { get; set; } = string.Empty;
 
         public string OrganisationCollectionName { get; set; } = string.Empty;
+
+        public string AppRoleCollectionName { get; set; } = "AppRoles";
+
+        public string AppUserCollectionName { get; set; } = "AppUsers";
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SaveMom.Contracts.Configurations;
+using SaveMom.Domain.Identity;
 using System.Text;
 
 namespace SaveMom.API.Extentions
@@ -52,6 +54,35 @@ namespace SaveMom.API.Extentions
                 });
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddAppIdentity(this IServiceCollection services, IConfiguration configuration)
+        {
+            var mongoDbSettings = configuration.GetSection(DbStoreOptions.SectionName).Get<DbStoreOptions>();
+
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+                options.SignIn.RequireConfirmedAccount = false;
+            }).AddMongoDbStores<AppUser, AppRole, Guid>(mongoDbSettings.ConnectionString, mongoDbSettings.DatabaseName);
+
+            return services;
+        }
+
+        public static IServiceCollection AddAppOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<DbStoreOptions>
+                (configuration.GetSection(DbStoreOptions.SectionName));
+
+            services.Configure<JwtOptions>
+                (configuration.GetSection(JwtOptions.SectionName));
+
+            services.Configure<AzureBlobStorageOptions>
+                (configuration.GetSection(AzureBlobStorageOptions.SectionName));
             return services;
         }
     }

@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using SaveMom.Contracts.Configurations;
 using SaveMom.Contracts.Dtos;
 using SaveMom.Domain;
+using SaveMom.Domain.Data;
+using SaveMom.Domain.Identity;
 using SaveMom.Domain.SeedData;
 
 namespace SaveMom.Services
@@ -11,12 +13,12 @@ namespace SaveMom.Services
     public class OrganisationService : IOrganisationService
     {
         private readonly IMongoCollection<Organisation> _organisationCollection;
-        public OrganisationService(IOptions<SaveMomStoreDatabaseOptions> saveMomStoreDatabaseOptions)
+        private readonly IDbContext<Organisation> _dbContext;
+        public OrganisationService(IOptions<DbStoreOptions> saveMomStoreDatabaseOptions, IDbContext<Organisation> dbContext)
         {
-            var saveMomDbSettings = saveMomStoreDatabaseOptions.Value;
-            var mongoClient = new MongoClient(saveMomDbSettings.ConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(saveMomDbSettings.DatabaseName);
-            _organisationCollection = mongoDatabase.GetCollection<Organisation>(saveMomDbSettings.OrganisationCollectionName);
+            _dbContext = dbContext;
+            _organisationCollection = _dbContext.Collection;
+
         }
         public async Task<OrganisationDto> Create(OrganisationDto organisationDto)
         {
