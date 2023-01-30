@@ -8,7 +8,7 @@ namespace SaveMom.API.Extentions
 {
     public static class RegisterServiceExtention
     {
-        public static IServiceCollection AddAppCors(this IServiceCollection services, string corsPolicyName)
+        public static IServiceCollection AddAppCors(this IServiceCollection services)
         {
             services.AddCors(o =>
             {
