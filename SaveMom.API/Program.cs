@@ -6,6 +6,7 @@ using SaveMom.Domain.Data;
 using SaveMom.Services;
 using SaveMom.Services.Identity;
 
+
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
@@ -21,7 +22,8 @@ services.AddScoped<IAzureBlobService, AzureBlobServices>();
 //Options
 services.AddAppOptions(configuration);
 
-services.AddAppCors();
+var appCorsPolicyName = "appCorsPolicy";
+services.AddAppCors(appCorsPolicyName);
 
 services.AddAppIdentity(configuration);
 
@@ -51,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(AppCorsPolicy);
+app.UseCors(appCorsPolicyName);
 //app.UseApiResponseWrapper();
 
 app.UseAuthentication();
