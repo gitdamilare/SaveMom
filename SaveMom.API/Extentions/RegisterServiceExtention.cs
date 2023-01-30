@@ -12,7 +12,7 @@ namespace SaveMom.API.Extentions
         {
             services.AddCors(o =>
             {
-                o.AddPolicy(name : "AppCorsPolicy", b => b.AllowAnyOrigin()
+                o.AddPolicy(name : corsPolicyName, b => b.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
