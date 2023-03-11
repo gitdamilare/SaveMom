@@ -127,6 +127,13 @@ namespace SaveMom.Services.Identity
             await _signInManager.SignOutAsync();
         }
 
+        public List<UserRoleResponse> GetRoles()
+        {
+            var roles = _roleManager.Roles.Where(xx => xx.IsUserRole).ToList();
+            var userroles = roles.Adapt<List<UserRoleResponse>>();
+            return userroles;
+        }
+
         private async Task<string> UploadUserDocument(RegisterUserRequest inputDto, string userId)
         {
             var file = inputDto.File;

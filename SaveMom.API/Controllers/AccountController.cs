@@ -77,6 +77,18 @@ namespace SaveMom.API.Controllers
             });
         }
 
+        [AllowAnonymous]
+        [HttpGet("getroles")]
+        public ActionResult<ApiResponse<List<UserRoleResponse>>> GetRoles()
+        {
+            var roles = _accountService.GetRoles();
+
+            return Ok(new ApiResponse<List<UserRoleResponse>>
+            {
+                Result = roles
+            });
+        }
+
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
