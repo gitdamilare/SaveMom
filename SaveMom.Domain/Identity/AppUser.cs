@@ -16,6 +16,9 @@ namespace SaveMom.Domain.Identity
         [MaxLength(250)]
         public string? LastName { get; set; }
 
+        [Required]
+        public string? OrganisationId { get; set; }
+
         public string? IdentityDocumentUrl { get; set; }
     }
 }

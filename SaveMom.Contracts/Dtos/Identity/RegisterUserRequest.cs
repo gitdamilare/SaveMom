@@ -15,6 +15,10 @@ namespace SaveMom.Contracts.Dtos.Identity
         public string? Email { get; set; }
 
         [Required]
+        [Phone]
+        public string? PhoneNumber { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 
@@ -25,7 +29,11 @@ namespace SaveMom.Contracts.Dtos.Identity
 
         public string? UserName { get; set; }
 
+        [Required]
         public Guid RoleId { get; set; }
+
+        [Required]
+        public string OrganisationId { get; set; }
 
         public IFormFile? File { get; set; }
     }

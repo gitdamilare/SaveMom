@@ -26,6 +26,7 @@ namespace SaveMom.Domain.SeedData
                 .RuleFor(o => o.NormalizedUserName, o => o.Person.Email.ToUpper())
                 .RuleFor(o => o.FirstName, o => o.Person.FirstName)
                 .RuleFor(o => o.LastName, o => o.Person.LastName)
+                .RuleFor(o => o.PhoneNumber, o => o.Person.Phone)
                 .RuleFor(o => o.EmailConfirmed, o => o.PickRandom(new bool[] { true, false }));
 
             var generatedFakeUsers = fakeUsers.Generate(5);

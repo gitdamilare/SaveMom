@@ -2,7 +2,7 @@
 {
     public class AzureBlobStorageOptions
     {
-        public const string SectionName = "AzureBlobStorage";
+        public const string SectionName = "AzureBS";
 
         public string? ConnectionString { get; set; }
 
