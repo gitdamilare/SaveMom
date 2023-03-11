@@ -12,8 +12,8 @@ namespace SaveMom.Services.Identity
         //Task<string> GetUserRoles(string email);
         //Task AddUserToRole(string email, string roleName);
         //Task RemoveUserFromRole(string email, string roleName);
-        Task<List<Claim>> GetUserClaims(AppUser user);
-
+        Task<List<Claim>> GetUserClaims(string userEmail);
         Task<bool> AddClaimToUser(AddClaimsRequest claimsInputDto);
+        Task<bool> RemoveUserClaim(AddClaimsRequest claimsInputDto);
     }
 }
