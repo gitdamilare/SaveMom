@@ -7,5 +7,6 @@ namespace SaveMom.Services.Identity
         Task<LoginResponse> Login(LoginRequest inputDto);
         Task Logout();
         Task<RegisterUserResponse> RegisterUser(RegisterUserRequest inputDto);
+        List<UserRoleResponse> GetRoles ();
     }
 }
