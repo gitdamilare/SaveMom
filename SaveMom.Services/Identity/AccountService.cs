@@ -5,8 +5,6 @@ using Microsoft.Extensions.Options;
 using SaveMom.Contracts.Configurations;
 using SaveMom.Contracts.Dtos.Identity;
 using SaveMom.Domain.Identity;
-using System.Text;
-
 namespace SaveMom.Services.Identity
 {
     public class AccountService : IAccountService
@@ -128,7 +126,6 @@ namespace SaveMom.Services.Identity
         {
             await _signInManager.SignOutAsync();
         }
-
 
         private async Task<string> UploadUserDocument(RegisterUserRequest inputDto, string userId)
         {

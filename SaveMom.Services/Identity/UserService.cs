@@ -38,8 +38,35 @@ namespace SaveMom.Services.Identity
             return false;
         }
 
-        public async Task<List<Claim>> GetUserClaims(AppUser user)
+        public async Task<bool> RemoveUserClaim(AddClaimsRequest claimsInputDto)
         {
+            var user = await _userManager.FindByEmailAsync(claimsInputDto.Email);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var createClaims = claimsInputDto.Claims.Select(c => new Claim(c.Claim ?? "", c.Value ?? ""));
+            var removeClaims = await _userManager.RemoveClaimsAsync(user, createClaims);
+
+            if (removeClaims.Succeeded)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<List<Claim>> GetUserClaims(string userEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            if(user == null)
+            {
+                return new List<Claim>();
+            }
+
             IdentityOptions _options = new IdentityOptions();
             var claims = new List<Claim>
             {
@@ -50,6 +77,8 @@ namespace SaveMom.Services.Identity
                 new Claim(_options.ClaimsIdentity.UserIdClaimType, user.Id.ToString()),
                 new Claim(_options.ClaimsIdentity.UserNameClaimType, user.UserName),
             };
+
+            
 
             var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);

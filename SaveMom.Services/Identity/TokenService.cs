@@ -27,7 +27,7 @@ namespace SaveMom.Services.Identity
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(options.SecretKey ?? "");
 
-            var claims = await _userService.GetUserClaims(user);
+            var claims = await _userService.GetUserClaims(user.Email);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
