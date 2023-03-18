@@ -18,7 +18,6 @@ namespace SaveMom.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ApiResponse<List<OrganisationDto>>> Get()
         {
             var organisation =  await _organisationService.Get();

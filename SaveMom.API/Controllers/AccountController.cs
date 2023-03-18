@@ -78,14 +78,14 @@ namespace SaveMom.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getroles")]
-        public ActionResult<ApiResponse<List<UserRoleResponse>>> GetRoles()
+        [HttpGet("getregistrationpagedata")]
+        public async Task<ActionResult<ApiResponse<RegistrationPageDataResponse>>> GetRegistrationPageData()
         {
-            var roles = _accountService.GetRoles();
+            var result = await _accountService.GetRegistrationPageData();
 
-            return Ok(new ApiResponse<List<UserRoleResponse>>
+            return Ok(new ApiResponse<RegistrationPageDataResponse>
             {
-                Result = roles
+                Result = result
             });
         }
 
