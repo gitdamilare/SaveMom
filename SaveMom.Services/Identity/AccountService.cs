@@ -143,16 +143,30 @@ namespace SaveMom.Services.Identity
             }
         }
 
+        public async Task<RegistrationPageDataResponse> GetRegistrationPageData()
+        {
+            var getOrganisations = await _organisationService.Get();
+
+            //TODO: Remove Take()
+            var organisations = getOrganisations
+                .Take(10)
+                .Select(xx => new RegistrationPageData { Id = xx.Id, Name = xx.Name })
+                .ToList();
+
+            var roles = _roleManager.Roles.Where(xx => xx.IsUserRole)
+                .ToList();
+            var userroles = roles.Adapt<List<RegistrationPageData>>();
+
+            return new RegistrationPageDataResponse
+            {
+                UserRoles = userroles,
+                Organisations = organisations,
+            };
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
-        }
-
-        public List<UserRoleResponse> GetRoles()
-        {
-            var roles = _roleManager.Roles.Where(xx => xx.IsUserRole).ToList();
-            var userroles = roles.Adapt<List<UserRoleResponse>>();
-            return userroles;
         }
 
         private async Task<string> UploadUserDocument(RegisterUserRequest inputDto, string userId)
