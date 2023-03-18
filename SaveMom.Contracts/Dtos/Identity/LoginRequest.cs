@@ -5,8 +5,8 @@ namespace SaveMom.Contracts.Dtos.Identity
     public class LoginRequest
     {
         [Required]
-        [EmailAddress]
-        public string? Email { get; set; }
+        //This works as an email and username
+        public string? Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

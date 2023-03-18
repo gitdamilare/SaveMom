@@ -14,6 +14,7 @@ namespace SaveMom.Services.Identity
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IAzureBlobService _azureBlobService;
+        private readonly IOrganisationService _organisationService;
         private readonly ILogger<AccountService> _logger;
 
         private readonly AzureBlobStorageOptions _storeOptions;
@@ -25,7 +26,8 @@ namespace SaveMom.Services.Identity
             ITokenService jwtTokenService,
             ILogger<AccountService> logger,
             IAzureBlobService azureBlobService,
-            IOptions<AzureBlobStorageOptions> storeOptions)
+            IOptions<AzureBlobStorageOptions> storeOptions,
+            IOrganisationService organisationService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -34,17 +36,21 @@ namespace SaveMom.Services.Identity
             _azureBlobService = azureBlobService;
             _logger = logger;
             _storeOptions = storeOptions.Value;
+            _organisationService = organisationService;
         }
 
         public async Task<LoginResponse> Login(LoginRequest inputDto)
         {
-            var user = await _userManager.FindByEmailAsync(inputDto.Email);
+            var user = await _userManager.FindByEmailAsync(inputDto.Username) == null 
+                ? await _userManager.FindByNameAsync(inputDto.Username) 
+                : await _userManager.FindByEmailAsync(inputDto.Username);
+
             if (user == null) 
             { 
                 return new LoginResponse
                 {
                     IsSuccess = false,
-                    Errors = new List<string> { $"{inputDto.Email} does not exist" }
+                    Errors = new List<string> { $"{inputDto.Username} does not exist" }
                 };
             }
 
@@ -81,33 +87,21 @@ namespace SaveMom.Services.Identity
                 };
             }
 
+            var getRole = _roleManager.Roles.FirstOrDefault(xx => xx.Id == inputDto.RoleId);
+            var validateInputDto = await ValidateRegisterUser(inputDto, getRole);
+
+            if (!validateInputDto.IsSuccess)
+            {
+                return validateInputDto;
+            }
+
             var newUser = inputDto.Adapt<AppUser>();
+
+            //Create user
             var createUser = await _userManager.CreateAsync(newUser, inputDto.Password);
 
-            var userId = newUser.Id.ToString();
-            if (createUser.Succeeded)
+            if(!createUser.Succeeded) 
             {
-                _logger.LogInformation(1, "User Created");
-
-                //Upload User Information
-                newUser.IdentityDocumentUrl = await UploadUserDocument(inputDto, userId);
-                await _userManager.UpdateAsync(newUser);
-
-                var getRole = _roleManager.Roles.FirstOrDefault(xx => xx.Id == inputDto.RoleId);
-
-                //catch error or set gobal error ... delete user if role could not be added
-                var addUserRole = await _userManager.AddToRoleAsync(newUser, getRole?.Name);
-
-                if (addUserRole.Succeeded)
-                {
-                    _logger.LogInformation(2, "Role Add to User Created");
-                    return new RegisterUserResponse
-                    {
-                        Email = inputDto.Email
-                    };
-
-                }
-
                 return new RegisterUserResponse
                 {
                     IsSuccess = false,
@@ -115,11 +109,38 @@ namespace SaveMom.Services.Identity
                 };
             }
 
-            return new RegisterUserResponse
+            _logger.LogInformation(1, "User Created");
+
+            //Add role to user
+            var addUserRole = await _userManager.AddToRoleAsync(newUser, getRole?.Name);
+
+            try
             {
-                IsSuccess = false,
-                Errors = createUser.Errors.Select(e => e.Description).ToList()
-            };
+                newUser.IdentityDocumentUrl = await UploadUserDocument(inputDto, newUser.Id.ToString());
+
+                if (!string.IsNullOrEmpty(newUser.IdentityDocumentUrl))
+                {
+                    await _userManager.UpdateAsync(newUser);
+                }
+                else
+                {
+                    //delete user
+                    await _userManager.DeleteAsync(newUser);
+                }
+
+                _logger.LogInformation(2, "User document uploaded");
+
+                return new RegisterUserResponse
+                {
+                    Email = inputDto.Email
+                };
+            }
+            catch (Exception)
+            {
+                //delete user
+                await _userManager.DeleteAsync(newUser);
+                throw;
+            }
         }
 
         public async Task Logout()
@@ -149,6 +170,33 @@ namespace SaveMom.Services.Identity
         {
             string createFileName = $"{userId}-{fileName.Split('.')[0]}.{fileName.Split('.')[1]}";
             return createFileName;
+        }
+
+        private async Task<RegisterUserResponse> ValidateRegisterUser(RegisterUserRequest inputDto, AppRole? appRole)
+        {
+            //Check if the role exists
+            if (appRole == null)
+            {
+                return new RegisterUserResponse()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { $"Role Id {inputDto.RoleId} does not exist" }
+                };
+            }
+
+            //Check if Organisation exists
+            var getOrgnisation = await _organisationService.Get(inputDto.OrganisationId);
+
+            if (getOrgnisation == null)
+            {
+                return new RegisterUserResponse()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { $"Orgnisation Id {inputDto.OrganisationId} does not exist" }
+                };
+            }
+
+            return new RegisterUserResponse();
         }
     }
 }
