@@ -18,6 +18,7 @@ services.AddScoped<IAccountService, AccountService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<ITokenService, TokenService>();
 services.AddScoped<IAzureBlobService, AzureBlobServices>();
+services.AddScoped<IPatientService, PatientService>();
 
 //Options
 services.AddAppOptions(configuration);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using SaveMom.Contracts.Configurations;
+using SaveMom.Domain.Antenatal;
 using SaveMom.Domain.Identity;
 using SaveMom.Domain.SeedData;
 
@@ -24,6 +25,7 @@ namespace SaveMom.Domain.Data
         {
             AppRoleSeed.SeedData(db.GetCollection<AppRole>(options.AppRoleCollectionName));
             AppUserSeed.SeedData(db.GetCollection<AppUser>(options.AppUserCollectionName));
+            PatientSeeder.SeedData(db.GetCollection<Patient>(options.PatientCollectionName));
         }
     }
 }
