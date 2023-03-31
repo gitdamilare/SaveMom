@@ -14,12 +14,14 @@ namespace SaveMom.Services
     {
         private readonly IMongoCollection<Organisation> _organisationCollection;
         private readonly IDbContext<Organisation> _dbContext;
+
         public OrganisationService(IOptions<DbStoreOptions> saveMomStoreDatabaseOptions, IDbContext<Organisation> dbContext)
         {
             _dbContext = dbContext;
             _organisationCollection = _dbContext.Collection;
 
         }
+
         public async Task<OrganisationDto> Create(OrganisationDto organisationDto)
         {
             var organisation = organisationDto.Adapt<Organisation>();
