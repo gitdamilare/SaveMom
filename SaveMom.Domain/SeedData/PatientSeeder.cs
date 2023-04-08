@@ -31,14 +31,16 @@ namespace SaveMom.Domain.SeedData
             var fakePatients = new Faker<Patient>()
                 .RuleFor(o => o.FirstName, o => o.Person.FirstName)
                 .RuleFor(o => o.LastName, o => o.Person.LastName)
-                .RuleFor(o => o.DateOfBirth, o => o.Person.DateOfBirth)
+                .RuleFor(o => o.DOB, o => o.Person.DateOfBirth)
                 .RuleFor(u => u.HospitalPHCNO, u => Guid.NewGuid().ToString())
                 .RuleFor(u => u.ContactNumber, f => f.Person.Phone)
                 .RuleFor(u => u.Spouse, f => fakeSpouseInfos.Generate(1).FirstOrDefault())
                 .RuleFor(u => u.Address, f => fakeAddresses.Generate(1).FirstOrDefault())
                 .RuleFor(u => u.MaritalStatus, f => f.PickRandomParam(new MartialStatus[] { MartialStatus.Single, MartialStatus.Married, MartialStatus.Other }))
                 .RuleFor(u => u.EducationLevel, f => f.PickRandomParam(new EducationLevel[] { EducationLevel.Primary, EducationLevel.Secondary, EducationLevel.Higher }))
-                .RuleFor(u => u.Allergies, f => new string[] { "Wheezing", "Nausea", "Vomiting", "Diarrhea" });
+                .RuleFor(u => u.Allergies, f => new string[] { "Wheezing", "Nausea", "Vomiting", "Diarrhea" })
+                .RuleFor(u => u.CreatedBy, f => "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d")
+                .RuleFor(u => u.ModifiedBy, f => "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d");
 
             return fakePatients.Generate(10);
         }
