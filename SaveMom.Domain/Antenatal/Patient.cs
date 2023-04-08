@@ -6,7 +6,7 @@ using MongoDbGenericRepository.Attributes;
 namespace SaveMom.Domain.Antenatal
 {
     [CollectionName("Patients")]
-    public class Patient
+    public class Patient : BaseEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -19,7 +19,7 @@ namespace SaveMom.Domain.Antenatal
         public string? LastName { get; set; }
 
         [BsonElement("DOB")]
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime? DOB { get; set; }
 
         [BsonElement("HospitalPHCNO")]
         public string? HospitalPHCNO { get; set; }
