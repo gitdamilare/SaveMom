@@ -28,7 +28,7 @@ namespace SaveMom.Services
         public async Task<List<PatientResponseDto>> Get()
         {
             var result = await _patientCollection.Find(_ => true)
-                .SortBy(p => p.CreatedDate)
+                .SortByDescending(p => p.CreatedDate)
                 .ToListAsync();
             return result.Adapt<List<PatientResponseDto>>();
         }
