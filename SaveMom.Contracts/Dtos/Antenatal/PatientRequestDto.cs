@@ -29,6 +29,9 @@ namespace SaveMom.Contracts.Dtos.Antenatal
         [Required]
         public EducationLevel EducationLevel { get; set; }
 
-        public string[]? Allergies { get; set; }
+        public string[]? Allergies { get; set; } = Array.Empty<string>();
+
+        [Required]
+        public PregnancySummaryDto? PregnancySummary { get;set; }
     }
 }

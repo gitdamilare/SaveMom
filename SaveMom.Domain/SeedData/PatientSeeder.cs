@@ -7,12 +7,22 @@ namespace SaveMom.Domain.SeedData
 {
     public static class PatientSeeder
     {
-        public static void SeedData(IMongoCollection<Patient> patientCollection)
+        public static void SeedData(IMongoCollection<Patient> patientCollection, bool resetdata = false)
         {
             if (!patientCollection.Find(_ => true).Any())
             {
                 patientCollection.InsertMany(GetInitialData());
             }
+            else
+            {
+                if (resetdata)
+                {
+                    patientCollection.DeleteMany(_ => true);
+                    patientCollection.InsertMany(GetInitialData());
+                }
+            }
+
+
         }
 
         private static List<Patient> GetInitialData()
@@ -28,6 +38,22 @@ namespace SaveMom.Domain.SeedData
                 .RuleFor(o => o.EmailAddress, o => o.Internet.Email())
                 .RuleFor(o => o.PhoneNumber, o => o.Person.Phone);
 
+            #region Patient Data
+
+            var fakePregnancyLoss = new Faker<PregnancyLoss>()
+                .RuleFor(o => o.AbortionNo, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.EctopicNo, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.StillBirthNo, o => o.PickRandom(Enumerable.Range(1, 5)));
+
+            var fakePregnancySummary = new Faker<PregnancySummary>()
+                .RuleFor(o => o.LastMenstruationDate, o => DateTime.UtcNow)
+                .RuleFor(o => o.ExpectedDeliveryDate, o => DateTime.UtcNow)
+                .RuleFor(o => o.Gravida, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.Term, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.PerTerm, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.LivingNo, o => o.PickRandom(Enumerable.Range(1, 5)))
+                .RuleFor(o => o.PregnancyLoss, o => fakePregnancyLoss.Generate(1).FirstOrDefault());
+
             var fakePatients = new Faker<Patient>()
                 .RuleFor(o => o.FirstName, o => o.Person.FirstName)
                 .RuleFor(o => o.LastName, o => o.Person.LastName)
@@ -40,9 +66,12 @@ namespace SaveMom.Domain.SeedData
                 .RuleFor(u => u.EducationLevel, f => f.PickRandomParam(new EducationLevel[] { EducationLevel.Primary, EducationLevel.Secondary, EducationLevel.Higher }))
                 .RuleFor(u => u.Allergies, f => new string[] { "Wheezing", "Nausea", "Vomiting", "Diarrhea" })
                 .RuleFor(u => u.CreatedBy, f => "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d")
-                .RuleFor(u => u.ModifiedBy, f => "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d");
+                .RuleFor(u => u.ModifiedBy, f => "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d")
+                .RuleFor(u => u.PregnancySummary, f => fakePregnancySummary.Generate(1).FirstOrDefault());
 
-            return fakePatients.Generate(10);
+            #endregion
+
+            return fakePatients.Generate(5);
         }
     }
 }

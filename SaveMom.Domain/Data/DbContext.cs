@@ -25,7 +25,7 @@ namespace SaveMom.Domain.Data
         {
             AppRoleSeed.SeedData(db.GetCollection<AppRole>(options.AppRoleCollectionName));
             AppUserSeed.SeedData(db.GetCollection<AppUser>(options.AppUserCollectionName));
-            PatientSeeder.SeedData(db.GetCollection<Patient>(options.PatientCollectionName));
+            PatientSeeder.SeedData(db.GetCollection<Patient>(options.PatientCollectionName), resetdata: false);
         }
     }
 }
