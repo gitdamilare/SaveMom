@@ -41,5 +41,8 @@ namespace SaveMom.Domain.Antenatal
 
         [BsonElement("Allergies")]
         public string[]? Allergies { get; set; }
+
+        [BsonElement("PregnancySummary")]
+        public PregnancySummary? PregnancySummary { get; set; }
     }
 }

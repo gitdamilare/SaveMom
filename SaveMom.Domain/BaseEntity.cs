@@ -11,7 +11,7 @@ namespace SaveMom.Domain
         public DateTime? ModifiedDate { get; set; } = DateTime.MinValue;
 
         [BsonElement("CreatedBy")]
-        public string? CreatedBy { get; set; }
+        public string? CreatedBy { get; set; } = "ca2bb416-ed5e-43dc-b389-9fb85c0a6a0d";
 
         [BsonElement("ModifiedBy")]
         public string? ModifiedBy { get; set; }
