@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using SaveMom.Contracts.Configurations;
 using SaveMom.Domain.Antenatal;
 using SaveMom.Domain.Identity;
+using SaveMom.Domain.Prenatal;
 using SaveMom.Domain.SeedData;
 
 namespace SaveMom.Domain.Data
@@ -26,6 +27,10 @@ namespace SaveMom.Domain.Data
             AppRoleSeed.SeedData(db.GetCollection<AppRole>(options.AppRoleCollectionName));
             AppUserSeed.SeedData(db.GetCollection<AppUser>(options.AppUserCollectionName));
             PatientSeeder.SeedData(db.GetCollection<Patient>(options.PatientCollectionName), resetdata: false);
+            ObstetricHistorySeeder.SeedData(
+                db.GetCollection<ObstetricHistory>(options.ObstetricHistoryCollectionName),
+                db.GetCollection<Patient>(options.PatientCollectionName),
+                resetdata: false);
         }
     }
 }
