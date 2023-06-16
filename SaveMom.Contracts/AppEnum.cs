@@ -1,4 +1,4 @@
-﻿namespace SaveMom.Domain
+﻿namespace SaveMom.Contracts
 {
     public static class AppEnum
     {

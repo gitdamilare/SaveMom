@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDbGenericRepository.Attributes;
-using static SaveMom.Domain.AppEnum;
+using SaveMom.Contracts;
+using static SaveMom.Contracts.AppEnum;
 
 namespace SaveMom.Domain.Prenatal
 {

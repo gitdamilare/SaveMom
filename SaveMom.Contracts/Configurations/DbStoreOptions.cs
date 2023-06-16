@@ -17,6 +17,6 @@ namespace SaveMom.Contracts.Configurations
 
         public string PatientCollectionName { get; set; } = "Patients";
 
-        public string ObstetricHistoryCollectionName { get; set; } = "ObstetricHistory";
+        public string ObstetricHistoryCollectionName { get; set; } = "ObstetricHistorys";
     }
 }

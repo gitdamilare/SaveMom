@@ -1,8 +1,9 @@
 ﻿using Bogus;
 using MongoDB.Driver;
+using SaveMom.Contracts;
 using SaveMom.Domain.Antenatal;
 using SaveMom.Domain.Prenatal;
-using static SaveMom.Domain.AppEnum;
+using static SaveMom.Contracts.AppEnum;
 
 namespace SaveMom.Domain.SeedData
 {
