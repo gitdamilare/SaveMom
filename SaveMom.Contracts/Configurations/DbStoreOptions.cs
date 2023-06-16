@@ -16,5 +16,7 @@ namespace SaveMom.Contracts.Configurations
         public string AppUserCollectionName { get; set; } = "AppUsers";
 
         public string PatientCollectionName { get; set; } = "Patients";
+
+        public string ObstetricHistoryCollectionName { get; set; } = "ObstetricHistorys";
     }
 }
