@@ -2,7 +2,7 @@
 
 namespace SaveMom.Contracts.Dtos
 {
-    public class ObstetricHistoryResponse : BaseServiceResponse
+    public record ObstetricHistoryResponse : BaseServiceResponse
     {
         public string? Id { get; set; }
 

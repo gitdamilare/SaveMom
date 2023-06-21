@@ -1,6 +1,6 @@
 ﻿namespace SaveMom.Contracts.Dtos.Identity
 {
-    public class RegisterUserResponse : BaseServiceResponse
+    public record RegisterUserResponse : BaseServiceResponse
     {
         public string? Email { get; set; }
     }

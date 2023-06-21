@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using MongoDB.Driver;
-using SaveMom.Contracts;
 using SaveMom.Domain.Antenatal;
 using SaveMom.Domain.Prenatal;
 using static SaveMom.Contracts.AppEnum;
@@ -12,7 +11,7 @@ namespace SaveMom.Domain.SeedData
         public static void SeedData(
             IMongoCollection<ObstetricHistory> obstetricHistoryCollection,
             IMongoCollection<Patient> patientCollection,
-            bool resetdata = false)
+            bool resetData = false)
         {
             if (!obstetricHistoryCollection.Find(_ => true).Any())
             {
@@ -20,14 +19,12 @@ namespace SaveMom.Domain.SeedData
             }
             else
             {
-                if (resetdata)
+                if (resetData)
                 {
                     obstetricHistoryCollection.DeleteMany(_ => true);
                     obstetricHistoryCollection.InsertMany(GetInitialData(patientCollection));
                 }
             }
-
-
         }
 
         private static List<ObstetricHistory>? GetInitialData(IMongoCollection<Patient> patientCollection)

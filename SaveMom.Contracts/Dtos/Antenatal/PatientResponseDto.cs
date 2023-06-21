@@ -2,7 +2,7 @@
 
 namespace SaveMom.Contracts.Dtos.Antenatal
 {
-    public class PatientResponseDto : BaseServiceResponse
+    public record PatientResponseDto : BaseServiceResponse
     {
         public string? Id { get; set; }
 

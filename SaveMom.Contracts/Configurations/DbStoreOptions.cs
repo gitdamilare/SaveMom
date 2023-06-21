@@ -1,4 +1,5 @@
 ﻿
+// ReSharper disable StringLiteralTypo
 namespace SaveMom.Contracts.Configurations
 {
     public class DbStoreOptions
@@ -18,5 +19,7 @@ namespace SaveMom.Contracts.Configurations
         public string PatientCollectionName { get; set; } = "Patients";
 
         public string ObstetricHistoryCollectionName { get; set; } = "ObstetricHistorys";
+
+        public string MedicalHistoryCollectionName { get; set; } = "MedicalHistorys";
     }
 }
