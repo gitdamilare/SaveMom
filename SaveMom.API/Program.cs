@@ -21,6 +21,7 @@ services.AddScoped<IAzureBlobService, AzureBlobServices>();
 services.AddScoped<IPatientService, PatientService>();
 services.AddScoped<IObstetricHistoryService, ObstetricHistoryService>();
 services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+services.AddScoped<IPhysicalExaminationService, PhysicalExaminationService>();
 
 //Options
 services.AddAppOptions(configuration);
