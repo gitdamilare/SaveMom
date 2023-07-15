@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SaveMom.API.Extentions;
@@ -6,10 +5,10 @@ using SaveMom.Domain.Data;
 using SaveMom.Services;
 using SaveMom.Services.Identity;
 
-
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
+
 
 // Add services to the container.
 services.AddScoped(typeof(IDbContext<>), typeof(MongoDbContext<>));
@@ -22,6 +21,9 @@ services.AddScoped<IPatientService, PatientService>();
 services.AddScoped<IObstetricHistoryService, ObstetricHistoryService>();
 services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 services.AddScoped<IPhysicalExaminationService, PhysicalExaminationService>();
+
+//MapsterConfiguration
+services.RegisterMapsterConfiguration();
 
 //Options
 services.AddAppOptions(configuration);
