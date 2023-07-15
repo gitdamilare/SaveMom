@@ -14,7 +14,7 @@ namespace SaveMom.Contracts.Dtos.Antenatal
 
         public string? HospitalPHCNO { get; set; }
 
-        public string? SpouseName { get; set; }
+        public ContactInfoDto? SpouseInfo { get; set; }
 
         public AddressDto? Address { get; set; }
 

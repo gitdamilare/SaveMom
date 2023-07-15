@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SaveMom.Contracts.CustomValidation;
+using System.ComponentModel.DataAnnotations;
 using static SaveMom.Contracts.Dtos.AppEnum;
 
 namespace SaveMom.Contracts.Dtos.Antenatal
@@ -17,7 +18,8 @@ namespace SaveMom.Contracts.Dtos.Antenatal
         //TODO : Generate HospitalPHCNO from PatientID
         public string? HospitalPHCNO => Guid.NewGuid().ToString();
 
-        public string? SpouseName { get; set; }
+        [SpouseNameValidation]
+        public ContactInfoDto? SpouseInfo { get; set; }
 
         public AddressDto? Address { get; set; }
 
