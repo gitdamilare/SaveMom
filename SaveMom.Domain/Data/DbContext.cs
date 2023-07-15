@@ -17,12 +17,12 @@ namespace SaveMom.Domain.Data
             var mongoDatabase = mongoClient.GetDatabase(mongoDbSettings.DatabaseName);
             Collection = mongoDatabase.GetCollection<T>($"{typeof(T).Name}s");
 
-            SeedApplicationData(mongoDatabase, mongoDbSettings);
+            MongoDbContext<T>.SeedApplicationData(mongoDatabase, mongoDbSettings);
         }
         public IMongoCollection<T> Collection { get; }
 
 
-        private void SeedApplicationData(IMongoDatabase db, DbStoreOptions options)
+        private static void SeedApplicationData(IMongoDatabase db, DbStoreOptions options)
         {
             var patientCN = db.GetCollection<Patient>(options.PatientCollectionName);
 
@@ -33,6 +33,9 @@ namespace SaveMom.Domain.Data
 
             var medicalHistroyCN = db.GetCollection<MedicalHistory>(options.MedicalHistoryCollectionName);
             MedicalHistorySeeder.SeedData(medicalHistroyCN, patientCN);
+
+            var physicalExaminationCN = db.GetCollection<PhysicalExamination>(options.PhysicalExaminationCollectionName);
+            PhysicalExaminationSeeder.SeedData(physicalExaminationCN, patientCN);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace SaveMom.Contracts.Configurations
 
         public string DatabaseName { get; set; } = string.Empty;
 
-        public string OrganisationCollectionName { get; set; } = string.Empty;
+        public string OrganisationCollectionName { get; set; } = "Organisations";
 
         public string AppRoleCollectionName { get; set; } = "AppRoles";
 
@@ -21,5 +21,6 @@ namespace SaveMom.Contracts.Configurations
         public string ObstetricHistoryCollectionName { get; set; } = "ObstetricHistorys";
 
         public string MedicalHistoryCollectionName { get; set; } = "MedicalHistorys";
+        public string PhysicalExaminationCollectionName { get; set; } = "PhysicalExaminations";
     }
 }
