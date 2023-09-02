@@ -4,6 +4,7 @@ using SaveMom.API.Extentions;
 using SaveMom.Domain.Data;
 using SaveMom.Services;
 using SaveMom.Services.Identity;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -40,6 +41,10 @@ services.AddControllers(o =>
     .Build();
 
     o.Filters.Add(new AuthorizeFilter(policy));
+}).AddJsonOptions(opts =>
+{
+    var enumConverter = new JsonStringEnumConverter();
+    opts.JsonSerializerOptions.Converters.Add(enumConverter);
 });
 
 services.AddAppAuthentication(configuration);
@@ -54,6 +59,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+if(app.Environment.IsProduction() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
